@@ -1,8 +1,11 @@
 package model.entities;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Seller {
+public class Seller implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private Integer id;
     private String name;
     private String email;
@@ -102,4 +105,5 @@ public class Seller {
     public String toString(){
         return "Seller [id=" + id + ", name=" + name + ", email=" + email + ", birthDate=" + birthDate + ", baseSalary=" + baseSalary + ", department=" + department + "]";
     }
+
 }
