@@ -1,5 +1,7 @@
 package Application;
 
+import java.sql.Connection;
+import java.time.LocalDate;
 import java.util.List;
 
 import db.DB;
@@ -11,11 +13,14 @@ import model.entities.Seller;
 
 public class Program {
     public static void main(String[] args){
-        DaoFactory fc = new DaoFactory();
-        SellerDao seller = fc.createSellerDao(DB.getConnection());
-        Department dep = new Department(2,"Computers");
-        List<Seller> s = seller.findByDepartment(dep);
-        System.out.println(s);
+        Seller sel = new Seller(null, "Lula", "Lulaladrao@gmail.com", LocalDate.parse("2006-06-04"), 2000.0, new Department(2, "Eletronics"));
+        Connection conn = DB.getConnection();
+
+        DaoFactory d = new DaoFactory();
+        SellerDao sd = d.createSellerDao(conn);
+        sd.insert(sel);
+        System.out.println("Inserted! New id = " + sel.getId());
+
 
         
     }

@@ -7,9 +7,10 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
+
 
 
 import db.DB;
@@ -28,8 +29,37 @@ public class SellerDaoJdbc implements SellerDao {
 
     @Override
     public void insert(Seller obj) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insert'");
+        PreparedStatement st = null;
+        try{
+            st = conn.prepareStatement("INSERT INTO seller\r\n" + //
+                                "(Name, Email, BirthDate, BaseSalary, DepartmentId)\r\n" + //
+                                "VALUES\r\n" + //
+                                "(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            st.setString(1, obj.getName());
+            st.setString(2, obj.getEmail());
+            st.setObject(3, obj.getBirthDate());
+            st.setDouble(4, obj.getBaseSalary());
+            st.setInt(5, obj.getDepartment().getId());
+            
+            int rows = st.executeUpdate();
+            if(rows > 0){
+                ResultSet rs = st.getGeneratedKeys();
+                while(rs.next()){
+                    int id = rs.getInt(1);
+                    obj.setId(id);
+                }
+                rs.close();
+            }
+            else{
+                throw new DbException("Unexpected erros! No rows added");
+            }
+        }
+        catch(SQLException e){
+            throw new DbException(e.getMessage());
+        }
+        finally{
+            DB.closeStatement(st);
+        }
     }
 
     @Override
@@ -72,9 +102,42 @@ public class SellerDaoJdbc implements SellerDao {
     }
 
     @Override
-    public List<Seller> findAll(Integer id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    public List<Seller> findAll() {
+        Statement st = null;
+        ResultSet rs = null;
+        try{
+            st =  conn.createStatement();
+            rs = st.executeQuery("SELECT seller.*,department.Name as DepName\r\n" + //
+                                "FROM seller INNER JOIN department\r\n" + //
+                                "ON seller.DepartmentId = department.Id\r\n" + //
+                                "ORDER BY Name");
+            Map<Integer, Department> deps = new  HashMap<>();
+            List<Seller> sels = new ArrayList<>();
+
+            while(rs.next()){
+                final Integer departmentId = rs.getInt("DepartmentId");
+
+                Seller sel = null;
+                Department dep_aux = null;
+                if(!deps.containsKey(departmentId)){
+                    dep_aux = instatiateDepartment(rs);
+                    deps.put(departmentId, dep_aux);
+                }
+                else{
+                    dep_aux = deps.get(departmentId);
+                }
+                sel = instatiateSeller(rs, dep_aux);
+                sels.add(sel);
+            }
+            return sels;
+        }
+        catch(SQLException e){
+            throw new DbException(e.getMessage());
+        }
+        finally{
+            DB.closeResultSet(rs);
+            DB.closeStatement(st);
+        }
     }
     @Override
     public List<Seller> findByDepartment(Department dep){
