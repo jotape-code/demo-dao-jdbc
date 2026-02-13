@@ -1,15 +1,22 @@
 package Application;
 
-import java.util.Arrays;
-import java.util.ArrayList;
 import java.util.List;
 
+import db.DB;
+import model.dao.DaoFactory;
+import model.dao.SellerDao;
 import model.entities.Department;
+import model.entities.Seller;
 
 
 public class Program {
     public static void main(String[] args){
-        Department dp = new Department(5,"carros");
-        System.out.println(dp);
+        DaoFactory fc = new DaoFactory();
+        SellerDao seller = fc.createSellerDao(DB.getConnection());
+        Department dep = new Department(2,"Computers");
+        List<Seller> s = seller.findByDepartment(dep);
+        System.out.println(s);
+
+        
     }
 }

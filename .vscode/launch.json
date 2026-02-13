@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Program",
+            "request": "launch",
+            "mainClass": "Application.Program",
+            "projectName": "demo-dao-jdbc_4e2d7aaf"
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}",
+            "stepFilters": {
+                "skipClasses": [
+                    "$JDK",
+                    "$Libraries"
+                ],
+                "skipSynthetics": true,
+                "skipStaticInitializers": false,
+                "skipConstructors": false
+            }
+        }
+    ]
+}
