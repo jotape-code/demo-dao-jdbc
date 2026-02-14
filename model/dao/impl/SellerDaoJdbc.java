@@ -11,7 +11,6 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 
-import com.mysql.cj.x.protobuf.MysqlxPrepare.Prepare;
 
 import db.DB;
 import db.DbException;

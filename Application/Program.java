@@ -2,10 +2,11 @@ package Application;
 
 import java.sql.Connection;
 import java.time.LocalDate;
-
+import java.util.List;
 
 import db.DB;
 import model.dao.DaoFactory;
+import model.dao.DepartmentDao;
 import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
@@ -13,12 +14,15 @@ import model.entities.Seller;
 
 public class Program {
     public static void main(String[] args){
-        Seller sel = new Seller(10, "Lula", "bababoi@gmail.com", LocalDate.parse("2006-06-04"), 2000.0, new Department(2, "Eletronics"));
         Connection conn = DB.getConnection();
-
         DaoFactory factory = new DaoFactory();
-        SellerDao sellerDao = factory.createSellerDao(conn);
-        sellerDao.deleteById(8);
+        DepartmentDao depDao = factory.createDepartmentDao(conn);
+
+        Department dep = new Department(1, "Computers");
+        dep.setName("Cellphone");
+        depDao.update(dep);
+
+       
 
         
     }
