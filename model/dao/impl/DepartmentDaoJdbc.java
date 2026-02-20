@@ -19,6 +19,8 @@ public class DepartmentDaoJdbc implements DepartmentDao{
     public DepartmentDaoJdbc(Connection conn){
         this.conn = conn;
     }
+
+    @Override
     public void insert(Department obj){
         PreparedStatement st = null;
         try{
@@ -47,6 +49,7 @@ public class DepartmentDaoJdbc implements DepartmentDao{
 
     }
 
+    @Override
     public void update(Department obj){
         PreparedStatement st = null;
         try{
@@ -63,6 +66,8 @@ public class DepartmentDaoJdbc implements DepartmentDao{
         }
 
     }
+    
+    @Override
     public void deleteById(Integer id){
         PreparedStatement st = null;
         try{
@@ -78,6 +83,8 @@ public class DepartmentDaoJdbc implements DepartmentDao{
             DB.closeStatement(st);
         }
     }
+
+    @Override
     public Department findById(Integer id){
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -100,6 +107,8 @@ public class DepartmentDaoJdbc implements DepartmentDao{
             DB.closeResultSet(rs);
         }
     }
+
+    @Override
     public List<Department> findAll(){
         Statement st = null;
         ResultSet rs = null;
@@ -130,5 +139,4 @@ public class DepartmentDaoJdbc implements DepartmentDao{
         
         
     }
-
 }
